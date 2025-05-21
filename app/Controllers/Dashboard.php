@@ -9,6 +9,10 @@ class Dashboard extends BaseController
 {
     public function index()
     {
-        //
+        $data['title'] = "Create More";
+        echo view('common/admin_header', $data);
+        echo view('common/admin_menubar', $data);
+        echo view('dashboard', $data);
+        echo view('common/admin_footer', $data);
     }
 }
