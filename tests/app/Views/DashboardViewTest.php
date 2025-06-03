@@ -12,7 +12,7 @@ class DashboardViewTest extends CIUnitTestCase
     public function testDasboardPageLoads()
     {
         $response = $this->get('/a/dashboard/');
-        $response->assetStatus(200);
+        $response->assertStatus(200);
         $response->assertSee('Dashboard');
     }
 }
