@@ -40,6 +40,8 @@
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="<?= base_url('assets/AdminLTE-4.0.0-beta3/dist/css/adminlte.css'); ?>" />
     <!--end::Required Plugin(AdminLTE)-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -56,17 +58,34 @@
             </div>
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="../index3.html" method="post">
+                <?php
+                if (isset($error)) {
+                ?>
+
+                    <script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Login Failed',
+                            text: '<?= $error; ?>',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK'
+                        });
+                    </script>
+
+                <?php
+                };
+                ?>
+                <form action="<?= base_url('/'); ?>" method="POST">
                     <div class="input-group mb-1">
                         <div class="form-floating">
-                            <input id="loginEmail" type="email" class="form-control" value="" placeholder="" />
+                            <input id="loginEmail" name="username" type="email" class="form-control" placeholder="" />
                             <label for="loginEmail">Email</label>
                         </div>
                         <div class="input-group-text"><span class="bi bi-envelope"></span></div>
                     </div>
                     <div class="input-group mb-1">
                         <div class="form-floating">
-                            <input id="loginPassword" type="password" class="form-control" placeholder="" />
+                            <input id="loginPassword" name="password" type="password" class="form-control" placeholder="" />
                             <label for="loginPassword">Password</label>
                         </div>
                         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -89,6 +108,13 @@
                     </div>
                     <!--end::Row-->
                 </form>
+
+                <div class="social-auth-links text-center mb-3 d-grid gap-2">
+                    <p>- OR -</p>
+                    <a href="#" class="btn btn-danger">
+                        <i class="fab fa-microsoft me-2"></i> Sign in with your DTI Email
+                    </a>
+                </div>
                 <!-- /.social-auth-links -->
                 <p class="mb-1"><a href="forgot-password.html">I forgot my password</a></p>
             </div>

@@ -12,7 +12,7 @@ class LoginViewTest extends CIUnitTestCase
 
     public function testLoginPageLoads()
     {
-        $response = $this->get('/a/login/');
+        $response = $this->get('/');
         $response->assertStatus(200);
         $response->assertSee('Login');
     }

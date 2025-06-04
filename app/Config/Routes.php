@@ -5,6 +5,5 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Login::index');
-$routes->get('/a/login/', 'Login::index');
-$routes->get('/a/dashboard/', 'Dashboard::index');
+$routes->add('/', 'Auth::login');
+$routes->add('/a/dashboard/', 'Dashboard::index');
