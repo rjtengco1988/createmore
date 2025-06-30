@@ -7,3 +7,5 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->add('/', 'Auth::login');
 $routes->add('/a/dashboard/', 'Dashboard::index');
+$routes->add('/privacy-policy/', 'Login::privacyPolicy');
+$routes->add('/terms-and-conditions/', 'Login::termsAndConditions');

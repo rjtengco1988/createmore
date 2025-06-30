@@ -111,7 +111,11 @@
 
                 <div class="social-auth-links text-center mb-3 d-grid gap-2">
                     <p>- OR -</p>
-                    <a href="#" class="btn btn-danger">
+                    <a href="https://bmbe-processor.auth.ap-southeast-1.amazoncognito.com/login
+?client_id=<?= env('AWS_CLIENT_ID'); ?>
+&response_type=code
+&scope=openid+email+profile
+&redirect_uri=http://localhost:3001/success-verified-account" class="btn btn-danger">
                         <i class="fab fa-microsoft me-2"></i> Sign in with your DTI Email
                     </a>
                 </div>
