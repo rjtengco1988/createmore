@@ -21,6 +21,7 @@ class Login extends BaseController
 
     public function termsAndConditions()
     {
-        echo "terms and conditions";
+        $data['title'] = "Privacy and Policy";
+        echo view('terms_and_conditions', $data);
     }
 }
