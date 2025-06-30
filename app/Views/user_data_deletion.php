@@ -4,13 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?= $title; ?></title>
+    <title>User Data Deletion Instructions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f8;
             color: #333;
-            margin: 0;
             padding: 0;
         }
 
@@ -69,13 +68,18 @@
 
         <p>
             Alternatively, you may request data deletion directly by emailing us at: <br>
-            <span class="email">createmore@dti.gov.ph</span>
+            <span class="email">support@yourdomain.com</span>
         </p>
 
         <p>
             Please include your Facebook User ID in the message. Once we receive your request, we will delete your data from our records within 7 business days and notify you upon completion.
         </p>
 
+        <div class="text-center mt-5">
+            <a href="http://localhost:8181/" class="btn btn-outline-primary btn-lg px-5">
+                ← Back
+            </a>
+        </div>
     </div>
 </body>
 
