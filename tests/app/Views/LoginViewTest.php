@@ -30,4 +30,11 @@ class LoginViewTest extends CIUnitTestCase
         $response->assertStatus(200);
         $response->assertSee('terms and conditions');
     }
+
+    public function testUserDataDeletionPageLoads()
+    {
+        $response = $this->get('/user-data-deletion');
+        $response->assertStatus(200);
+        $response->assertSee('User Data Deletion Instructions');
+    }
 }

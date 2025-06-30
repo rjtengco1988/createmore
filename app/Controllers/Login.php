@@ -24,4 +24,10 @@ class Login extends BaseController
         $data['title'] = "Privacy and Policy";
         echo view('terms_and_conditions', $data);
     }
+
+    public function userDataDeletion()
+    {
+        $data['title'] = "User Data Deletion";
+        echo view('user_data_deletion', $data);
+    }
 }
