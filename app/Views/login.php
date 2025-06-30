@@ -122,6 +122,20 @@
                 <!-- /.social-auth-links -->
                 <p class="mb-1"><a href="forgot-password.html">I forgot my password</a></p>
             </div>
+
+            <hr class="my-4">
+
+            <div class="text-center small">
+                <p class="mb-1">
+                    <a href="<?= base_url('privacy-policy'); ?>" class="text-decoration-none text-muted">Privacy Policy</a>
+                </p>
+                <p class="mb-1">
+                    <a href="<?= base_url('terms-and-conditions'); ?>" class="text-decoration-none text-muted">Terms and Conditions</a>
+                </p>
+                <p>
+                    <a href="<?= base_url('user-data-deletion'); ?>" class="text-decoration-none text-muted">Request Data Deletion</a>
+                </p>
+            </div>
             <!-- /.login-card-body -->
         </div>
     </div>
