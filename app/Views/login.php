@@ -119,6 +119,11 @@
                         <i class="fab fa-microsoft me-2"></i> Sign in with your DTI Email
                     </a>
                 </div>
+                <div class="social-auth-links text-center mb-3 d-grid gap-2">
+                    <a href="<?= base_url('login/facebook') ?>" class="btn btn-primary">
+                        <i class="fab fa-facebook me-2"></i> Sign in with Facebook
+                    </a>
+                </div>
                 <!-- /.social-auth-links -->
                 <p class="mb-1"><a href="forgot-password.html">I forgot my password</a></p>
             </div>

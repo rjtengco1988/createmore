@@ -3,9 +3,11 @@
 namespace App\Controllers;
 
 use App\Libraries\CognitoService;
+use App\Libraries\FacebookLogin;
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
 use GuzzleHttp\Client;
+
 
 class Auth extends BaseController
 {
@@ -73,5 +75,42 @@ class Auth extends BaseController
 
 
         return view('login', $data);
+    }
+
+    public function facebookLogin()
+    {
+        $fb = new FacebookLogin();
+        return redirect()->to($fb->getLoginUrl());
+    }
+
+    public function facebookCallback()
+    {
+        $fb = new \App\Libraries\FacebookLogin();
+
+        try {
+            $accessToken = $fb->getAccessToken();
+        } catch (\Throwable $e) {
+            log_message('error', 'Error getting access token: ' . $e->getMessage());
+            return redirect()->to('/login')->with('error', 'Facebook login failed.');
+        }
+
+        if (!isset($accessToken)) {
+            log_message('error', 'Access token was not returned by Facebook.');
+            return redirect()->to('/login')->with('error', 'Facebook did not return an access token.');
+        }
+
+        $user = $fb->getUserProfile($accessToken);
+
+        if ($user) {
+            session()->set([
+                'isLoggedIn' => true,
+                'userName' => $user['name'],
+                'userEmail' => $user['email'],
+            ]);
+            return redirect()->to('/a/dashboard');
+        }
+
+        log_message('error', 'User profile could not be fetched.');
+        return redirect()->to('/login')->with('error', 'Facebook login failed.');
     }
 }

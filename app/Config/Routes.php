@@ -10,3 +10,5 @@ $routes->add('/a/dashboard/', 'Dashboard::index');
 $routes->add('/privacy-policy/', 'Login::privacyPolicy');
 $routes->add('/terms-and-conditions/', 'Login::termsAndConditions');
 $routes->add('/user-data-deletion', 'Login::userDataDeletion');
+$routes->get('login/facebook', 'Auth::facebookLogin');
+$routes->get('login/callback', 'Auth::facebookCallback');
