@@ -9,4 +9,8 @@ $routes->get('/', 'Login::index');
 $routes->get('/a/login/', 'Login::index');
 $routes->get('login-status', 'Login::loginStatus');
 $routes->get('/auth', 'Login::auth');
-$routes->get('/a/dashboard/', 'Dashboard::index');
+
+$routes->group('a', ['filter' => 'auth'], function ($routes) {
+    $routes->get('dashboard', 'Dashboard::index');
+    $routes->get('test-tampered', 'Dashboard::testTamperedToken');
+});

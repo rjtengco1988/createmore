@@ -62,7 +62,7 @@
 
         <div class="alert alert-danger text-center d-flex align-items-center justify-content-center" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            Login Failed. Please contact the system administrator.
+            <?= session()->getFlashdata('error'); ?>
         </div>
 
         <div class="text-center mb-3 text-muted">

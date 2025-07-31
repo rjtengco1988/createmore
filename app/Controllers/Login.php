@@ -68,9 +68,9 @@ class Login extends BaseController
             session()->set('access_token', $tokens['access_token']);
             session()->set('refresh_token', $tokens['refresh_token']);
 
-            return redirect()->to('/a/dashboard');
+            return redirect()->to('/a/dashboard/');
         } else {
-            return redirect()->to('/login')->with('error', 'Authentication failed.');
+            return redirect()->to('/login-status')->with('error', 'Authentication failed.');
         }
     }
 

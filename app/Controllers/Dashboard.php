@@ -15,4 +15,11 @@ class Dashboard extends BaseController
         echo view('dashboard', $data);
         echo view('common/admin_footer', $data);
     }
+
+    public function testTamperedToken()
+    {
+        // Set a fake, invalid JWT to simulate a tampered session
+        session()->set('id_token', '123123lkj09812kl3123-123123213jkjkl123');
+        return redirect()->to('/a/dashboard');
+    }
 }
