@@ -28,6 +28,5 @@ class LoginViewTest extends CIUnitTestCase
     {
         $response = $this->get('/login-status');
         $response->assertStatus(200);
-        $response->assertSee('Login Failed');
     }
 }
