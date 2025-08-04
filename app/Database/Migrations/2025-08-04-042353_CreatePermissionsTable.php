@@ -16,6 +16,7 @@ class CreatePermissionsTable extends Migration
                 'auto_increment' => true,
             ],
             'name'    => ['type' => 'VARCHAR', 'constraint' => '100'],
+            'group'    => ['type' => 'VARCHAR', 'constraint' => '100'],
             'slug'       => ['type' => 'VARCHAR', 'constraint' => '100'],
             'description'    => ['type' => 'TEXT'],
             'created_at' => [
