@@ -11,24 +11,28 @@ class PermissionsSeeder extends Seeder
         $data = [
             [
                 'name' => 'Can Add Role',
+                'group' => 'Role',
                 'slug' => 'can_add_role',
                 'description' => 'Allows the user to create and assign new roles',
                 'created_at'       => '2025-08-04 12:46:00',
             ],
             [
                 'name' => 'Can View Role',
+                'group' => 'Role',
                 'slug' => 'can_view_role',
                 'description' => 'Allows the user to view the list and details of existing roles',
                 'created_at'       => '2025-08-04 12:46:00',
             ],
             [
                 'name' => 'Can Modify Role',
+                'group' => 'Role',
                 'slug' => 'can_modify_role',
                 'description' => 'Allows the user to edit the name, permissions, or settings of existing roles',
                 'created_at'       => '2025-08-04 12:46:00',
             ],
             [
                 'name' => 'Can Delete Role',
+                'group' => 'Role',
                 'slug' => 'can_delete_role',
                 'description' => 'Allows the user to remove existing roles from the system',
                 'created_at'       => '2025-08-04 12:46:00',
