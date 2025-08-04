@@ -250,9 +250,9 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="./widgets/cards.html" class="nav-link">
+                                    <a href="<?= base_url('/a/permissions/'); ?>" class="nav-link">
                                         <i class="nav-icon bi bi-circle"></i>
-                                        <p>Permission</p>
+                                        <p>Permissions</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
