@@ -220,11 +220,47 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>
+                                    User Management
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="./widgets/small-box.html" class="nav-link">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>Users</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./widgets/info-box.html" class="nav-link">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>Roles</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./widgets/cards.html" class="nav-link">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>Permission</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./widgets/cards.html" class="nav-link">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>Assign Roles</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
 
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>
             </div>
+
             <!--end::Sidebar Wrapper-->
         </aside>
