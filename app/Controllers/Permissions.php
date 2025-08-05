@@ -22,6 +22,7 @@ class Permissions extends BaseController
 
         try {
             $data['show_all'] = $this->permissions_model->show_all();
+            $data['pager'] = $this->permissions_model->pager;
         } catch (DatabaseException $e) {
             log_message('error', sprintf(
                 "Database Error: %s in %s on line %d",
@@ -39,6 +40,8 @@ class Permissions extends BaseController
             ));
             $data['error'] = "A data error occurred. Please try again later.";
         }
+
+
 
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);

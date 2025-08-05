@@ -49,7 +49,7 @@ class Permissions_Model extends Model
 
     public function show_all()
     {
-        $result = $this->findAll();
+        $result = $this->paginate(2);
         return $result;
     }
 }

@@ -69,8 +69,8 @@
 
 
                                        <?php else: ?>
-                                           <tr colspan="4">
-                                               <td class="text-center text-danger">
+                                           <tr>
+                                               <td colspan="4" class="text-center text-danger">
                                                    <i class="bi bi-database-x" style="font-size: 3rem; opacity: 0.5;"></i>
                                                    <div class="mt-2 small" style="opacity: 0.6;">We couldn't load the information right now. Please refresh the page or check back shortly.</div>
                                                </td>
@@ -83,13 +83,7 @@
                            </div>
                            <!-- /.card-body -->
                            <div class="card-footer clearfix">
-                               <ul class="pagination pagination-sm m-0 float-end">
-                                   <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                   <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                   <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                   <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                   <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                               </ul>
+                               <?php echo $pager->links('default', 'custom_pagenumber_view'); ?>
                            </div>
                        </div>
                        <!-- /.card -->
