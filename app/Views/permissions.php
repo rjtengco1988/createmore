@@ -50,7 +50,7 @@
                                                <?php foreach ($show_all as $show_all): ?>
                                                    <tr class="align-middle">
                                                        <td style="width: 20%;"><?= $show_all['name']; ?></td>
-                                                       <td style="width: 20%;"><?= $show_all['name']; ?></td>
+                                                       <td style="width: 20%;"><?= $show_all['group']; ?></td>
                                                        <td style="width: 20%;"><?= $show_all['slug']; ?></td>
                                                        <td style="width: 40%;"><?= $show_all['description']; ?></td>
                                                    </tr>
