@@ -13,16 +13,28 @@ class Permissions extends BaseController
 
     public function __construct()
     {
+        $this->request = \Config\Services::request();
         $this->permissions_model = new Permissions_model();
     }
+
 
     public function index()
     {
         $data['title'] = "Create More";
 
         try {
-            $data['show_all'] = $this->permissions_model->show_all();
-            $data['pager'] = $this->permissions_model->pager;
+
+            $data['search_name'] = $this->request->getPost('name');
+
+            if ($this->request->getMethod() == "POST") {
+                $data['validation'] = null;
+                $criteria = $this->request->getPost();
+                $data['show_all'] = $this->permissions_model->findPermissions($criteria);
+                $data['pager'] = $this->permissions_model->pager;
+            } else {
+                $data['show_all'] = $this->permissions_model->show_all();
+                $data['pager'] = $this->permissions_model->pager;
+            }
         } catch (DatabaseException $e) {
             log_message('error', sprintf(
                 "Database Error: %s in %s on line %d",
@@ -40,9 +52,6 @@ class Permissions extends BaseController
             ));
             $data['error'] = "A data error occurred. Please try again later.";
         }
-
-
-
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
         echo view('permissions', $data);

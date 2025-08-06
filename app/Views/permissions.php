@@ -31,8 +31,15 @@
                            <div class="card-header">
                                <h3 class="card-title">Permission List</h3>
                            </div>
+
                            <!-- /.card-header -->
                            <div class="card-body">
+                               <div class="mb-3">
+                                   <form method="POST" action="<?= base_url('a/permissions'); ?>" class="mb-3 d-flex" role="search">
+                                       <input type="text" name="name" class="form-control me-2" placeholder="Search by Permission Name" value="<?= esc($search_name ?? '') ?>">
+                                       <button type="submit" class="btn btn-primary">Search</button>
+                                   </form>
+                               </div>
 
                                <table class="table table-bordered">
                                    <thead>
@@ -83,7 +90,10 @@
                            </div>
                            <!-- /.card-body -->
                            <div class="card-footer clearfix">
-                               <?php echo $pager->links('default', 'custom_pagenumber_view'); ?>
+                               <?php if (isset($pager) && $show_all): ?>
+                                   <?php echo $pager->links('default', 'custom_pagenumber_view'); ?>
+                               <?php endif; ?>
+
                            </div>
                        </div>
                        <!-- /.card -->

@@ -14,7 +14,7 @@ class Permissions_Model extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id', 'name', 'group', 'slug', 'description'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -46,10 +46,32 @@ class Permissions_Model extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    protected $allowedSearchFields = ['name'];
+
 
     public function show_all()
     {
-        $result = $this->paginate(env('SHOW_ITEM_PER_PAGE'));
-        return $result;
+        return $this->paginate(env('SHOW_ITEM_PER_PAGE'));
+    }
+
+    public function findPermissions(array $criteria = [])
+    {
+        $builder = $this;
+
+        $hasFilter = false;
+
+        foreach ($criteria as $field => $value) {
+            if (!empty($value) && in_array($field, $this->allowedSearchFields)) {
+                $builder = $builder->where($field, $value);
+                $hasFilter = true;
+            }
+        }
+
+        // Fallback: show all if no filter is applied
+        if (!$hasFilter) {
+            return $this->paginate(env('SHOW_ITEM_PER_PAGE'));
+        }
+
+        return $builder->paginate(env('SHOW_ITEM_PER_PAGE'));
     }
 }
