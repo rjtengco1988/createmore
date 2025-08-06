@@ -21,7 +21,7 @@
 
                         <div class="card-body">
                             <div class="mb-3">
-                                <form method="POST" action="<?= base_url('a/permissions'); ?>" class="mb-3 d-flex align-items-center" role="search">
+                                <form method="GET" action="<?= base_url('a/permissions'); ?>" class="mb-3 d-flex align-items-center" role="search">
                                     <div class="input-group">
                                         <span class="input-group-text bg-light">
                                             <i class="bi bi-search"></i>

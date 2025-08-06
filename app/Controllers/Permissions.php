@@ -26,9 +26,10 @@ class Permissions extends BaseController
 
             $data['search_name'] = $this->request->getPost('name');
 
-            if ($this->request->getMethod() == "POST") {
-                $data['validation'] = null;
-                $criteria = $this->request->getPost();
+            if ($this->request->getMethod() == "GET") {
+
+                $data['search_name'] = $this->request->getGet('name');
+                $criteria = $this->request->getGet();
                 $data['show_all'] = $this->permissions_model->findPermissions($criteria);
                 $data['pager'] = $this->permissions_model->pager;
             } else {

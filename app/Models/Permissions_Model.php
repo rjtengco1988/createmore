@@ -62,7 +62,7 @@ class Permissions_Model extends Model
 
         foreach ($criteria as $field => $value) {
             if (!empty($value) && in_array($field, $this->allowedSearchFields)) {
-                $builder = $builder->where($field, $value);
+                $builder->like($field, $value, 'both');
                 $hasFilter = true;
             }
         }
