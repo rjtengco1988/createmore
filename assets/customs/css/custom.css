@@ -1,0 +1,13 @@
+.clear-btn {
+    border-radius: 0;
+    font-size: 1.2rem;
+    padding: 0 0.75rem;
+    color: #6c757d;
+    /* Bootstrap secondary text */
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+}
+
+.clear-btn:hover {
+    background-color: #e2e6ea;
+}
