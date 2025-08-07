@@ -15,8 +15,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card mb-12">
-
-                        <div class="card-body">
+                        <div class="card-header">
                             <!-- Top Row -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">Roles List</h5>
@@ -43,6 +42,11 @@
                             <p class="mt-1 mb-0 text-muted small">
                                 View, edit, and manage roles in your application. Roles define grouped permissions that can be assigned to users.
                             </p>
+                        </div>
+
+
+
+                        <div class="card-body">
                             <div class="mb-3">
                                 <form method="GET" action="<?= base_url('a/roles'); ?>" class="mb-3 d-flex align-items-center" role="search">
                                     <div class="input-group">
@@ -69,7 +73,7 @@
                             <table class="table table-bordered table-hover table-striped">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="fw-bold" style="width: 5%;"></th>
+                                        <th class="fw-bold" style="width: 10%;"></th>
                                         <th class="fw-bold" style="width: 20%;">Role Name</th>
                                         <th class="fw-bold" style="width: 20%;">Slug</th>
                                         <th class="fw-bold" style="width: 30%;">Description</th>

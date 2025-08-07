@@ -58,4 +58,14 @@ class Roles extends BaseController
         echo view('roles', $data);
         echo view('common/admin_footer', $data);
     }
+
+
+    public function createRole()
+    {
+        $data['title'] = "Create More";
+        echo view('common/admin_header', $data);
+        echo view('common/admin_menubar', $data);
+        echo view('create_role', $data);
+        echo view('common/admin_footer', $data);
+    }
 }

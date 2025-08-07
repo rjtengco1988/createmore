@@ -11,3 +11,12 @@
 .clear-btn:hover {
     background-color: #e2e6ea;
 }
+
+.card-body img {
+    height: 64px;
+    object-fit: contain;
+}
+
+.card-body h6 {
+    font-size: 1rem;
+}
