@@ -14,4 +14,5 @@ $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->get('dashboard', 'Dashboard::index');
     $routes->get('test-tampered', 'Dashboard::testTamperedToken');
     $routes->add('permissions', 'Permissions::index');
+    $routes->add('roles', 'Roles::index');
 });
