@@ -12,7 +12,7 @@ class RolesModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'name', 'slug', 'description', 'crated_by', 'created_at'];
+    protected $allowedFields    = ['name', 'slug', 'description', 'created_by', 'created_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class RolesModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -68,5 +68,11 @@ class RolesModel extends Model
         }
 
         return $builder->paginate(env('SHOW_ITEM_PER_PAGE'));
+    }
+
+
+    public function insertRole($data)
+    {
+        return $this->insert($data);
     }
 }

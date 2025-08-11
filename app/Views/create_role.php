@@ -82,13 +82,95 @@
                     <!--begin::Quick Example-->
                     <div class="card card-primary card-outline mb-4">
 
+                        <?php if (isset($validation) && $validation->getErrors()): ?>
+                            <style>
+                                .aws-banner {
+                                    background: #d13212;
+                                    color: #fff;
+                                    padding: 10px 16px;
+                                    font-family: sans-serif;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: space-between;
+                                    gap: 12px;
+                                    animation: fadeIn .5s ease-in-out
+                                }
+
+                                .aws-banner.fade-out {
+                                    animation: fadeOut .5s ease-in-out forwards
+                                }
+
+                                .aws-banner__msg {
+                                    display: flex;
+                                    gap: 10px;
+                                    align-items: flex-start
+                                }
+
+                                .aws-banner__list {
+                                    margin: 0;
+                                    padding-left: 18px
+                                }
+
+                                .aws-banner__close {
+                                    background: none;
+                                    border: none;
+                                    color: #fff;
+                                    font-size: 18px;
+                                    cursor: pointer
+                                }
+
+                                @keyframes fadeIn {
+                                    from {
+                                        opacity: 0;
+                                        transform: translateY(-10px)
+                                    }
+
+                                    to {
+                                        opacity: 1;
+                                        transform: translateY(0)
+                                    }
+                                }
+
+                                @keyframes fadeOut {
+                                    from {
+                                        opacity: 1;
+                                        transform: translateY(0)
+                                    }
+
+                                    to {
+                                        opacity: 0;
+                                        transform: translateY(-10px)
+                                    }
+                                }
+                            </style>
+                            <div class="aws-banner" id="awsBanner">
+                                <div class="aws-banner__msg">
+                                    <strong>Validation Failed.</strong>
+                                    <ul class="aws-banner__list">
+                                        <?php foreach ($validation->getErrors() as $err): ?>
+                                            <li><?= esc($err) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                                <button class="aws-banner__close" type="button" aria-label="Dismiss" onclick="closeAwsBanner()">&times;</button>
+                            </div>
+                            <script>
+                                function closeAwsBanner() {
+                                    const b = document.getElementById('awsBanner');
+                                    b.classList.add('fade-out');
+                                    setTimeout(() => b.remove(), 500);
+                                }
+                            </script>
+                        <?php endif; ?>
+
                         <!--begin::Header-->
                         <div class="card-header">
                             <div class="card-title text-dark fw-bold">Define your role</div>
                         </div>
                         <!--end::Header-->
                         <!--begin::Form-->
-                        <form>
+                        <form action="<?= base_url('a/roles/create'); ?>" method="POST">
+                            <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
                             <!--begin::Body-->
                             <div class="card-body">
                                 <div class="mb-3">
@@ -99,8 +181,8 @@
                                             <i class="bi bi-info-circle ms-1"></i>
                                         </a>
                                     </label>
-                                    <input type="text" class="form-control" id="inputName" maxlength="128">
-                                    <div class="form-text text-muted">
+                                    <input type="text" class="form-control <?= isset($validation) && $validation->hasError('roleName') ? 'is-invalid' : '' ?>" id="inputName" maxlength="128" name="roleName" value="<?= set_value('roleName'); ?>">
+                                    <div class=" form-text text-muted">
                                         Names are limited to 128 characters or fewer. Names may only contain alphanumeric characters, spaces, and the following special characters: + = , . @ -
                                     </div>
                                 </div>
@@ -112,7 +194,7 @@
                                             <i class="bi bi-info-circle ms-1"></i>
                                         </a>
                                     </label>
-                                    <input type="text" class="form-control" id="inputSlug" />
+                                    <input type="text" class="form-control <?= isset($validation) && $validation->hasError('roleSlug') ? 'is-invalid' : '' ?>" id="inputSlug" name="roleSlug" />
                                     <div class="form-text text-muted">
                                         A slug must be unique and contain only lowercase letters, numbers, and hyphens. No spaces or special characters are allowed.
                                     </div>
@@ -125,7 +207,7 @@
                                             <i class="bi bi-info-circle ms-1"></i>
                                         </a>
                                     </label>
-                                    <textarea class="form-control" id="inputDescription" rows="3" maxlength="200"></textarea>
+                                    <textarea class="form-control <?= isset($validation) && $validation->hasError('roleDescription') ? 'is-invalid' : '' ?>" id="inputDescription" rows="3" maxlength="200" name="roleDescription"><?= set_value('roleDescription') ?></textarea>
                                     <div class="form-text text-muted">
                                         Description must be 200 characters or fewer.
                                     </div>

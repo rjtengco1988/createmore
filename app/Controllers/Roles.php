@@ -62,7 +62,56 @@ class Roles extends BaseController
 
     public function createRole()
     {
+        helper(['form']);
         $data['title'] = "Create More";
+        $data['validation'] = null;
+
+
+        if ($this->request->getMethod() == "POST") {
+            $filterRules = [
+                'roleName' => [
+                    'label' => 'Role Name',
+                    'rules' => 'required|max_length[128]|regex_match[/^[A-Za-z0-9 +=,.@-]+$/]',
+                ],
+
+                'roleSlug' => [
+                    'label' => 'Role Slug',
+                    'rules' => 'required|max_length[128]|regex_match[/^[a-z0-9-]+$/]|is_unique[acl_roles.slug]',
+                    'errors' => [
+                        'alpha_dash' => 'The {field} may only contain lowercase letters, numbers, and hyphens.',
+                        'lowercase'  => 'The {field} must be in lowercase.',
+                        'is_unique'  => 'The {field} must be unique.',
+                    ]
+                ],
+                'roleDescription' => [
+                    'label' => 'Role Description',
+                    'rules' => 'permit_empty|max_length[200]',
+                    'errors' => [
+                        'max_length' => 'The {field} must be 200 characters or fewer.'
+                    ]
+                ],
+            ];
+
+            if ($this->validate($filterRules)) {
+
+                $data = [
+                    'name'   => $this->request->getPost('roleName'),
+                    'slug' => $this->request->getPost('roleSlug'),
+                    'description' => $this->request->getPost('roleDescription'),
+                    'created_by' => session()->get('user_email')
+                ];
+
+                if ($this->roles_model->insertRole($data)) {
+                    return redirect()->to('a/roles/attach-permissions')->with('success', 'Role added successfully.');
+                } else {
+                    return redirect()->back()->with('error', 'Failed to add role definition.');
+                }
+
+                $this->roles_model->insertRole($data);
+            } else {
+                $data['validation'] = $this->validator;
+            }
+        }
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
         echo view('create_role', $data);
