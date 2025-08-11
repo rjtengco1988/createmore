@@ -83,66 +83,7 @@
                     <div class="card card-primary card-outline mb-4">
 
                         <?php if (isset($validation) && $validation->getErrors()): ?>
-                            <style>
-                                .aws-banner {
-                                    background: #d13212;
-                                    color: #fff;
-                                    padding: 10px 16px;
-                                    font-family: sans-serif;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: space-between;
-                                    gap: 12px;
-                                    animation: fadeIn .5s ease-in-out
-                                }
 
-                                .aws-banner.fade-out {
-                                    animation: fadeOut .5s ease-in-out forwards
-                                }
-
-                                .aws-banner__msg {
-                                    display: flex;
-                                    gap: 10px;
-                                    align-items: flex-start
-                                }
-
-                                .aws-banner__list {
-                                    margin: 0;
-                                    padding-left: 18px
-                                }
-
-                                .aws-banner__close {
-                                    background: none;
-                                    border: none;
-                                    color: #fff;
-                                    font-size: 18px;
-                                    cursor: pointer
-                                }
-
-                                @keyframes fadeIn {
-                                    from {
-                                        opacity: 0;
-                                        transform: translateY(-10px)
-                                    }
-
-                                    to {
-                                        opacity: 1;
-                                        transform: translateY(0)
-                                    }
-                                }
-
-                                @keyframes fadeOut {
-                                    from {
-                                        opacity: 1;
-                                        transform: translateY(0)
-                                    }
-
-                                    to {
-                                        opacity: 0;
-                                        transform: translateY(-10px)
-                                    }
-                                }
-                            </style>
                             <div class="aws-banner" id="awsBanner">
                                 <div class="aws-banner__msg">
                                     <strong>Validation Failed.</strong>
@@ -154,14 +95,34 @@
                                 </div>
                                 <button class="aws-banner__close" type="button" aria-label="Dismiss" onclick="closeAwsBanner()">&times;</button>
                             </div>
-                            <script>
-                                function closeAwsBanner() {
-                                    const b = document.getElementById('awsBanner');
-                                    b.classList.add('fade-out');
-                                    setTimeout(() => b.remove(), 500);
-                                }
-                            </script>
+
+
+
+
+
+                        <?php elseif (session()->getFlashdata('error')): ?>
+
+                            <div class="aws-banner" id="awsBanner">
+                                <div class="aws-banner__msg">
+                                    <strong>An error occured.</strong>
+                                    <ul class="aws-banner__list">
+
+                                        <li><?= session()->getFlashdata('error') ?></li>
+
+                                    </ul>
+                                </div>
+                                <button class="aws-banner__close" type="button" aria-label="Dismiss" onclick="closeAwsBanner()">&times;</button>
+                            </div>
+
                         <?php endif; ?>
+
+                        <script>
+                            function closeAwsBanner() {
+                                const b = document.getElementById('awsBanner');
+                                b.classList.add('fade-out');
+                                setTimeout(() => b.remove(), 500);
+                            }
+                        </script>
 
                         <!--begin::Header-->
                         <div class="card-header">

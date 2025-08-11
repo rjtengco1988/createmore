@@ -94,20 +94,29 @@ class Roles extends BaseController
 
             if ($this->validate($filterRules)) {
 
-                $data = [
-                    'name'   => $this->request->getPost('roleName'),
-                    'slug' => $this->request->getPost('roleSlug'),
-                    'description' => $this->request->getPost('roleDescription'),
-                    'created_by' => session()->get('user_email')
-                ];
+                try {
+                    $roleDefinition = [
+                        'name'        => $this->request->getPost('roleName'),
+                        'slug'        => $this->request->getPost('roleSlug'),
+                        'description' => $this->request->getPost('roleDescription'),
+                    ];
 
-                if ($this->roles_model->insertRole($data)) {
-                    return redirect()->to('a/roles/attach-permissions')->with('success', 'Role added successfully.');
-                } else {
-                    return redirect()->back()->with('error', 'Failed to add role definition.');
+                    session()->sest('roleDefinition', $roleDefinition);
+
+                    return redirect()
+                        ->to('a/roles/attach-permissions')
+                        ->with('success', 'Role added successfully.');
+                } catch (\Throwable $e) {
+                    log_message('error', sprintf(
+                        "Data Error: %s in %s on line %d",
+                        $e->getMessage(),
+                        $e->getFile(),
+                        $e->getLine()
+                    ));
+                    return redirect()
+                        ->back()
+                        ->with('error', $e->getMessage());
                 }
-
-                $this->roles_model->insertRole($data);
             } else {
                 $data['validation'] = $this->validator;
             }

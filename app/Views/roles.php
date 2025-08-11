@@ -85,10 +85,9 @@
                                         <?php if (isset($show_all) && !empty($show_all)) : ?>
                                             <?php foreach ($show_all as $show_all): ?>
                                                 <tr class="align-middle">
+                                                    <td></td>
                                                     <td class="fw-semibold"><?= esc($show_all['name']); ?></td>
-                                                    <td><?= esc($show_all['group']); ?></td>
                                                     <td><?= esc($show_all['slug']); ?></td>
-                                                    <td class="fw-semibold text-wrap"><?= esc($show_all['description']); ?></td>
                                                     <td class="fw-semibold text-wrap"><?= esc($show_all['description']); ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
