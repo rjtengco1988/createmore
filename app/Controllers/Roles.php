@@ -101,7 +101,7 @@ class Roles extends BaseController
                         'description' => $this->request->getPost('roleDescription'),
                     ];
 
-                    session()->sest('roleDefinition', $roleDefinition);
+                    session()->set('roleDefinition', $roleDefinition);
 
                     return redirect()
                         ->to('a/roles/attach-permissions')
@@ -124,6 +124,19 @@ class Roles extends BaseController
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
         echo view('create_role', $data);
+        echo view('common/admin_footer', $data);
+    }
+
+
+    public function attachPermissions()
+    {
+
+        helper(['form']);
+        $data['title'] = "Create More";
+
+        echo view('common/admin_header', $data);
+        echo view('common/admin_menubar', $data);
+        echo view('attach_permissions', $data);
         echo view('common/admin_footer', $data);
     }
 }

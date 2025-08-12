@@ -74,4 +74,51 @@ class Permissions_Model extends Model
 
         return $builder->paginate(env('SHOW_ITEM_PER_PAGE'));
     }
+
+
+    public function searchPaginated(array $opts): array
+    {
+        $q       = trim($opts['q'] ?? '');
+        $sort    = $opts['sort'] ?? 'name';                 // whitelist below
+        $dir     = strtolower($opts['dir'] ?? 'asc') === 'desc' ? 'DESC' : 'ASC';
+        $page    = max(1, (int)($opts['page'] ?? 1));
+        $perPage = min(50, max(1, (int)($opts['perPage'] ?? env('SHOW_ITEM_PER_PAGE', 1))));
+
+        $builder = $this->builder(); // do not mutate $this
+
+        if ($q !== '') {
+            $builder->groupStart()
+                ->like('name', $q, 'both')
+                ->orLike('slug', $q, 'both')
+                ->orLike('description', $q, 'both')
+                ->groupEnd();
+        }
+
+        // Sort whitelist
+        $sortable = ['id', 'name', 'slug', 'description'];
+        if (!in_array($sort, $sortable, true)) {
+            $sort = 'name';
+        }
+
+        // Count FIRST (clone to avoid losing where conditions)
+        $countBuilder = clone $builder;
+        $total = (int)$countBuilder->countAllResults();
+
+        // Page data
+        $rows = $builder
+            ->orderBy($sort, $dir)
+            ->limit($perPage, ($page - 1) * $perPage)
+            ->get()
+            ->getResultArray();
+
+        return [
+            'rows'    => $rows,
+            'total'   => $total,
+            'page'    => $page,
+            'perPage' => $perPage,
+            'pages'   => (int)ceil($total / $perPage),
+            'sort'    => $sort,
+            'dir'     => strtolower($dir),
+        ];
+    }
 }

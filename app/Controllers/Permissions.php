@@ -58,4 +58,31 @@ class Permissions extends BaseController
         echo view('permissions', $data);
         echo view('common/admin_footer', $data);
     }
+
+    // app/Controllers/Permissions.php
+    public function apiList()
+    {
+        $this->response->setHeader('Content-Type', 'application/json');
+
+        // Read and sanitize GET params
+        $opts = [
+            'q'       => (string)$this->request->getGet('q'),
+            'page'    => (int)$this->request->getGet('page'),
+            'perPage' => (int)$this->request->getGet('perPage'),
+            'sort'    => (string)$this->request->getGet('sort'),
+            'dir'     => (string)$this->request->getGet('dir'),
+        ];
+
+        $model = new \App\Models\Permissions_Model();
+        try {
+            $data = $model->searchPaginated($opts);
+            return $this->response->setJSON(['ok' => true, 'data' => $data]);
+        } catch (\Throwable $e) {
+            log_message('error', 'Permissions apiList error: {msg}', ['msg' => $e->getMessage()]);
+            return $this->response->setStatusCode(500)->setJSON([
+                'ok' => false,
+                'error' => 'Unexpected error',
+            ]);
+        }
+    }
 }

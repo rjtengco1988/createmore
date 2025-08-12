@@ -9,6 +9,7 @@
                     <h3 class="fw-semibold mb-0" style="font-size: 2 rem;">
                         Set up role for your application
                     </h3>
+                    <div class="text-muted small">Step 1 of 3</div>
                 </div>
             </div>
             <!--end::Row-->
@@ -142,7 +143,13 @@
                                             <i class="bi bi-info-circle ms-1"></i>
                                         </a>
                                     </label>
-                                    <input type="text" class="form-control <?= isset($validation) && $validation->hasError('roleName') ? 'is-invalid' : '' ?>" id="inputName" maxlength="128" name="roleName" value="<?= set_value('roleName'); ?>">
+                                    <input type="text"
+                                        class="form-control <?= isset($validation) && $validation->hasError('roleName') ? 'is-invalid' : '' ?>"
+                                        id="inputName"
+                                        maxlength="128"
+                                        name="roleName"
+                                        value="<?= set_value('roleName', session('roleDefinition.name')) ?>">
+
                                     <div class=" form-text text-muted">
                                         Names are limited to 128 characters or fewer. Names may only contain alphanumeric characters, spaces, and the following special characters: + = , . @ -
                                     </div>
@@ -155,7 +162,12 @@
                                             <i class="bi bi-info-circle ms-1"></i>
                                         </a>
                                     </label>
-                                    <input type="text" class="form-control <?= isset($validation) && $validation->hasError('roleSlug') ? 'is-invalid' : '' ?>" id="inputSlug" name="roleSlug" />
+                                    <input type="text"
+                                        class="form-control <?= isset($validation) && $validation->hasError('roleSlug') ? 'is-invalid' : '' ?>"
+                                        id="inputSlug"
+                                        name="roleSlug"
+                                        value="<?= set_value('roleSlug', session('roleDefinition.slug')) ?>">
+
                                     <div class="form-text text-muted">
                                         A slug must be unique and contain only lowercase letters, numbers, and hyphens. No spaces or special characters are allowed.
                                     </div>
@@ -168,7 +180,12 @@
                                             <i class="bi bi-info-circle ms-1"></i>
                                         </a>
                                     </label>
-                                    <textarea class="form-control <?= isset($validation) && $validation->hasError('roleDescription') ? 'is-invalid' : '' ?>" id="inputDescription" rows="3" maxlength="200" name="roleDescription"><?= set_value('roleDescription') ?></textarea>
+                                    <textarea class="form-control <?= isset($validation) && $validation->hasError('roleDescription') ? 'is-invalid' : '' ?>"
+                                        id="inputDescription"
+                                        rows="3"
+                                        maxlength="200"
+                                        name="roleDescription"><?= set_value('roleDescription', session('roleDefinition.description')) ?></textarea>
+
                                     <div class="form-text text-muted">
                                         Description must be 200 characters or fewer.
                                     </div>
@@ -181,7 +198,7 @@
                                     Cancel
                                 </a>
                                 <button type="submit" class="btn btn-primary">
-                                    Create Role
+                                    Attach Permission
                                 </button>
                             </div>
                             <!--end::Footer-->
