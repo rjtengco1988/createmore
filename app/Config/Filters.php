@@ -35,6 +35,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'auth'    => \App\Filters\CognitoAuthFilter::class,
+        'roleWizardAutoClear' => \App\Filters\RoleWizardAutoClear::class,
     ];
 
     /**
@@ -73,6 +74,15 @@ class Filters extends BaseFilters
             // 'honeypot',
             'csrf',
             // 'invalidchars',
+            'roleWizardAutoClear' => [
+                'except' => [
+                    'a/roles/create*',
+                    'a/roles/attach-permissions*',
+                    'a/api/permissions*',
+                    'assets/*',
+                    'public/*',
+                ],
+            ],
         ],
         'after' => [
             // 'honeypot',
