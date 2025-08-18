@@ -23,6 +23,32 @@
 
                     <!-- Card -->
                     <div class="card card-primary card-outline">
+
+                        <?php if (session()->getFlashdata('error')): ?>
+
+                            <div class="aws-banner" id="awsBanner">
+                                <div class="aws-banner__msg">
+                                    <strong>Validation Error.</strong>
+                                    <ul class="aws-banner__list">
+
+                                        <li><?= session()->getFlashdata('error') ?></li>
+
+                                    </ul>
+                                </div>
+                                <button class="aws-banner__close" type="button" aria-label="Dismiss" onclick="closeAwsBanner()">&times;</button>
+                            </div>
+
+
+
+                            <script>
+                                function closeAwsBanner() {
+                                    const b = document.getElementById('awsBanner');
+                                    b.classList.add('fade-out');
+                                    setTimeout(() => b.remove(), 500);
+                                }
+                            </script>
+
+                        <?php endif; ?>
                         <div class="card-header">
                             <div class="d-flex flex-column">
                                 <span class="card-title text-dark fw-bold mb-1">
@@ -35,6 +61,7 @@
                         </div>
 
                         <form action="<?= base_url('a/roles/attach-permissions'); ?>" method="POST" novalidate>
+                            <?= csrf_field() ?>
                             <div class="card-body">
                                 <!-- Role summary -->
                                 <div class="row g-3 mb-2">
@@ -85,6 +112,9 @@
                                     </div>
                                     <div class="small text-muted"><span id="permSelectedCount">0</span> selected</div>
                                 </div>
+
+
+
 
                                 <div class="table-responsive border rounded">
                                     <table class="table table-bordered table-hover table-striped mb-0" id="permTable">

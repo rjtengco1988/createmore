@@ -121,4 +121,10 @@ class Permissions_Model extends Model
             'dir'     => strtolower($dir),
         ];
     }
+
+
+    public function findPermissionsById($permsIds)
+    {
+        return $this->select('id')->whereIn('id', $permsIds)->findColumn('id') ?? [];
+    }
 }

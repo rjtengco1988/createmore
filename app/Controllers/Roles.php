@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\RolesModel;
+use App\Models\Permissions_Model;
+use App\Models\RolesPermission;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Database\Exceptions\DataException;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -11,11 +13,15 @@ use CodeIgniter\HTTP\ResponseInterface;
 class Roles extends BaseController
 {
     private $roles_model;
+    private $permission_model;
+    private $roles_permission;
 
     public function __construct()
     {
         $this->request = \Config\Services::request();
         $this->roles_model = new RolesModel();
+        $this->permission_model = new Permissions_Model();
+        $this->roles_permission = new RolesPermission();
     }
 
     public function index()
@@ -130,9 +136,69 @@ class Roles extends BaseController
 
     public function attachPermissions()
     {
+        $session = session();
+        $roleDef = $session->get('roleDefinition'); // ['name','slug','description'] from Step 1
 
+        // Guard both GET and POST
+        if (empty($roleDef)) {
+            return redirect()->to(base_url('a/roles/create'))
+                ->with('error', 'Start by creating a role.');
+        }
+
+        // POST = user clicked "Attach"
+        if ($this->request->getMethod() === 'POST') {
+            // Read selected permission IDs
+            $permIds = array_map('intval', (array) $this->request->getPost('permissions'));
+            $permIds = array_values(array_unique(array_filter($permIds, fn($v) => $v > 0)));
+
+            // Optional: require at least one
+            if (empty($permIds)) {
+                return redirect()->back()->withInput()->with('error', 'Select at least one permission.');
+            }
+
+
+            $validIds  = $this->permission_model->findPermissionsById($permIds);
+            if (count($validIds) !== count($permIds)) {
+                return redirect()->back()->withInput()->with('error', 'Some permissions are invalid.');
+            }
+
+            $db = \Config\Database::connect();
+            $db->transStart();
+
+            $this->roles_model->insertRole([
+                'name'        => $roleDef['name'],
+                'slug'        => $roleDef['slug'],
+                'description' => $roleDef['description'],
+                'created_by' => session()->get('user_email')
+            ]);
+
+            $lastInsertedId = $db->insertID();
+
+
+            // Attach permissions in pivot table
+            if (!empty($validIds)) {
+
+                $this->roles_permission->insertRolePermission($lastInsertedId, $validIds, session()->get('user_email'), true);
+            }
+
+            $db->transComplete();
+            if (! $db->transStatus()) {
+                return redirect()->back()->withInput()->with('error', 'Could not save role and permissions.');
+            }
+
+            // // Clear wizard/session so it doesn’t linger
+            $session->remove('roleDefinition');
+
+            return redirect()->to(base_url('a/roles/attached-to-user/'))->with('success', 'Role created and permissions attached.');
+        }
+
+        // GET = render page
         helper(['form']);
-        $data['title'] = "Create More";
+        $data = [
+            'title' => 'Create More',
+            'attachedPermissionIds'  => [],
+            'roleDefinition' => $roleDef,
+        ];
 
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
