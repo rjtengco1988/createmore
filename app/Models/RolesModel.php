@@ -75,4 +75,14 @@ class RolesModel extends Model
     {
         return $this->insert($data);
     }
+
+    public function findBySlugName($slug)
+    {
+        return $this->where('slug', $slug)->first();
+    }
+
+    public function findById($id)
+    {
+        return $this->where('id', $id)->first();
+    }
 }

@@ -66,4 +66,17 @@ class RolesPermission extends Model
 
         return $builder->insertBatch($rows);
     }
+
+    public function countPermissionsAttached($id)
+    {
+        return $this->where('role_id', $id)->countAllResults();
+    }
+
+    public function findPermissionsAttached(int $roleId)
+    {
+        return $this->select('acl_role_permissions.*, acl_permissions.*')
+            ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'left')
+            ->where('acl_role_permissions.role_id', $roleId)
+            ->paginate((int) env('SHOW_ITEM_PER_PAGE', 10));
+    }
 }

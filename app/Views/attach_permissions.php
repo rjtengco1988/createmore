@@ -26,7 +26,7 @@
 
                         <?php if (session()->getFlashdata('error')): ?>
 
-                            <div class="aws-banner" id="awsBanner">
+                            <div class="aws-banner aws-banner--error" id="awsBanner">
                                 <div class="aws-banner__msg">
                                     <strong>Validation Error.</strong>
                                     <ul class="aws-banner__list">
@@ -40,15 +40,34 @@
 
 
 
-                            <script>
-                                function closeAwsBanner() {
-                                    const b = document.getElementById('awsBanner');
-                                    b.classList.add('fade-out');
-                                    setTimeout(() => b.remove(), 500);
-                                }
-                            </script>
+
+
+                        <?php elseif (session()->getFlashdata('success')): ?>
+                            <div class="aws-banner aws-banner--success" id="awsBanner">
+                                <div class="aws-banner__msg">
+                                    <strong>Success!</strong>
+                                    <ul class="aws-banner__list">
+                                        <li><?= session()->getFlashdata('success') ?></li>
+
+                                    </ul>
+                                </div>
+                                <button class="aws-banner__close" onclick="closeAwsBanner()">&times;</button>
+                            </div>
+
+
+
+
 
                         <?php endif; ?>
+
+                        <script>
+                            function closeAwsBanner() {
+                                const b = document.getElementById('awsBanner');
+                                b.classList.add('fade-out');
+                                setTimeout(() => b.remove(), 500);
+                            }
+                        </script>
+
                         <div class="card-header">
                             <div class="d-flex flex-column">
                                 <span class="card-title text-dark fw-bold mb-1">

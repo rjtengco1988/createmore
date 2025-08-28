@@ -147,49 +147,74 @@ class Roles extends BaseController
 
         // POST = user clicked "Attach"
         if ($this->request->getMethod() === 'POST') {
-            // Read selected permission IDs
-            $permIds = array_map('intval', (array) $this->request->getPost('permissions'));
-            $permIds = array_values(array_unique(array_filter($permIds, fn($v) => $v > 0)));
 
-            // Optional: require at least one
-            if (empty($permIds)) {
-                return redirect()->back()->withInput()->with('error', 'Select at least one permission.');
+
+            try {
+
+                // Read selected permission IDs
+                $permIds = array_map('intval', (array) $this->request->getPost('permissions'));
+                $permIds = array_values(array_unique(array_filter($permIds, fn($v) => $v > 0)));
+
+                // Optional: require at least one
+                if (empty($permIds)) {
+                    return redirect()->back()->withInput()->with('error', 'Select at least one permission.');
+                }
+
+
+                $validIds  = $this->permission_model->findPermissionsById($permIds);
+                if (count($validIds) !== count($permIds)) {
+                    return redirect()->back()->withInput()->with('error', 'Some permissions are invalid.');
+                }
+
+                $db = \Config\Database::connect();
+                $db->transStart();
+
+                $this->roles_model->insertRole([
+                    'name'        => $roleDef['name'],
+                    'slug'        => $roleDef['slug'],
+                    'description' => $roleDef['description'],
+                    'created_by' => session()->get('user_email')
+                ]);
+
+                $lastInsertedId = $db->insertID();
+
+
+                // Attach permissions in pivot table
+                if (!empty($validIds)) {
+
+                    $this->roles_permission->insertRolePermission($lastInsertedId, $validIds, session()->get('user_email'), true);
+                }
+
+                $db->transComplete();
+                if (! $db->transStatus()) {
+                    return redirect()->back()->withInput()->with('error', 'Could not save role and permissions.');
+                }
+
+                $data['roleInformation'] = $this->roles_model->findById($lastInsertedId);
+
+                if ($data['roleInformation']) {
+                    $session->remove('roleDefinition');
+                    return redirect()->to(base_url('a/role-information/' . $data['roleInformation']['id']))->with('success', 'Role created and permissions attached.');
+                } else {
+                    return redirect()->back()->withInput()->with('error', 'No Role Definition Found.');
+                }
+            } catch (DatabaseException $e) {
+                log_message('error', sprintf(
+                    "Database Error: %s in %s on line %d",
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()
+                ));
+                $data['error'] = "A database error occurred. Please try again later.";
+            } catch (DataException $e) {
+                log_message('error', sprintf(
+                    "Data Error: %s in %s on line %d",
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()
+                ));
+                $data['error'] = "A data error occurred. Please try again later.";
             }
-
-
-            $validIds  = $this->permission_model->findPermissionsById($permIds);
-            if (count($validIds) !== count($permIds)) {
-                return redirect()->back()->withInput()->with('error', 'Some permissions are invalid.');
-            }
-
-            $db = \Config\Database::connect();
-            $db->transStart();
-
-            $this->roles_model->insertRole([
-                'name'        => $roleDef['name'],
-                'slug'        => $roleDef['slug'],
-                'description' => $roleDef['description'],
-                'created_by' => session()->get('user_email')
-            ]);
-
-            $lastInsertedId = $db->insertID();
-
-
-            // Attach permissions in pivot table
-            if (!empty($validIds)) {
-
-                $this->roles_permission->insertRolePermission($lastInsertedId, $validIds, session()->get('user_email'), true);
-            }
-
-            $db->transComplete();
-            if (! $db->transStatus()) {
-                return redirect()->back()->withInput()->with('error', 'Could not save role and permissions.');
-            }
-
-            // // Clear wizard/session so it doesn’t linger
-            $session->remove('roleDefinition');
-
-            return redirect()->to(base_url('a/roles/attached-to-user/'))->with('success', 'Role created and permissions attached.');
         }
 
         // GET = render page
@@ -203,6 +228,46 @@ class Roles extends BaseController
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
         echo view('attach_permissions', $data);
+        echo view('common/admin_footer', $data);
+    }
+
+    public function roleInformation($id)
+    {
+        $data = [
+            'title' => 'Create More',
+        ];
+
+        try {
+
+            $data['rolesInformation'] = $this->roles_model->findById($id);
+            $data['noAttachedPermission'] = $this->roles_permission->countPermissionsAttached($id);
+            $data['attachedPermissions'] = $this->roles_permission->findPermissionsAttached($id);
+            $data['pager'] = $this->roles_permission->pager;
+
+            if (empty($data['rolesInformation'])) {
+                $data['error'] = "No Role Name Found. Please make sure the role name exist.";
+            }
+        } catch (DatabaseException $e) {
+            log_message('error', sprintf(
+                "Database Error: %s in %s on line %d",
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            ));
+            $data['error'] = "A database error occurred. Please try again later.";
+        } catch (DataException $e) {
+            log_message('error', sprintf(
+                "Data Error: %s in %s on line %d",
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            ));
+            $data['error'] = "A data error occurred. Please try again later.";
+        }
+
+        echo view('common/admin_header', $data);
+        echo view('common/admin_menubar', $data);
+        echo view('role_information', $data);
         echo view('common/admin_footer', $data);
     }
 }
