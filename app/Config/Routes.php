@@ -18,5 +18,5 @@ $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->add('roles/create', 'Roles::createRole');
     $routes->add('roles/attach-permissions', 'Roles::attachPermissions');
     $routes->get('api/permissions', 'Permissions::apiList');
-    $routes->get('role-information/(:any)', 'Roles::roleInformation/$1');
+    $routes->add('role-information/(:any)', 'Roles::roleInformation/$1');
 });
