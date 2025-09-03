@@ -132,10 +132,14 @@
 
 
                             <div class="card-body">
-                                <div class="d-flex gap-2 mb-3">
-                                    <input type="search" class="form-control" placeholder="Search permissions…">
-                                    <button class="btn btn-outline-secondary">Filter</button>
-                                </div>
+                                <form method="post" action="<?= base_url('a/role-information/' . $rolesInformation['id']) ?>">
+                                    <?= csrf_field() ?>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <input type="search" class="form-control" placeholder="Search permissions…" name="search_criteria">
+                                        <button type="submit" class="btn btn-outline-secondary">Filter</button>
+                                    </div>
+
+                                </form>
 
 
                                 <form method="post" action="<?= base_url('a/roles/' . esc($rolesInformation['id']) . '/permissions/bulk') ?>">
@@ -177,7 +181,7 @@
                                                             </td>
                                                             <td class="fw-semibold"><?= esc($show_all['name']); ?></td>
                                                             <td class="fw-semibold"><?= esc($show_all['description']); ?></td>
-                                                            <td class="fw-semibold"><?= esc($show_all['name']); ?></td>
+                                                            <td class="fw-semibold"><?= esc($show_all['created_by']); ?></td>
 
                                                         </tr>
                                                     <?php endforeach; ?>
