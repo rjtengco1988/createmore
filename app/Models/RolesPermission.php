@@ -74,9 +74,72 @@ class RolesPermission extends Model
 
     public function findPermissionsAttached(int $roleId)
     {
-        return $this->select('acl_role_permissions.*, acl_permissions.*')
-            ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'left')
+
+        return $this->select([
+            'acl_role_permissions.id            AS role_perm_id',
+            'acl_role_permissions.role_id       AS role_id',
+            'acl_role_permissions.permission_id AS permission_id',
+            'acl_permissions.id                 AS perm_id',
+            'acl_permissions.name               AS permission_name',
+            'acl_permissions.description        AS permission_description',
+        ])
+            ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'inner') // or 'left' if you need orphans
             ->where('acl_role_permissions.role_id', $roleId)
+            ->orderBy('acl_permissions.name', 'ASC') // stable pagination
             ->paginate((int) env('SHOW_ITEM_PER_PAGE', 10));
+    }
+
+    public function findPermissionsByNameAndId($permissionName, $roleId)
+    {
+
+        // assuming $this->table === 'acl_role_permissions'
+        $builder = $this->select([
+            'acl_role_permissions.id             AS role_perm_id',
+            'acl_role_permissions.role_id        AS role_id',
+            'acl_role_permissions.permission_id  AS permission_id',
+            'acl_permissions.id                  AS perm_id',
+            'acl_permissions.name                AS permission_name',
+            'acl_permissions.description         AS permission_description',
+        ])
+            ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'inner')
+            ->where('acl_role_permissions.role_id', $roleId);
+
+        // Only add the filter if user typed something
+        if (!empty($permissionName)) {
+            // partial match; 4th arg "true" escapes % and _ so user input is safe
+            $builder->like('acl_permissions.name', $permissionName, 'both', true);
+            // optionally search description too:
+            // $builder->orLike('acl_permissions.description', $q, 'both', true);
+        }
+
+        // stable ordering for pagination
+        $builder->orderBy('acl_permissions.name', 'ASC');
+
+        return $builder->paginate((int) env('SHOW_ITEM_PER_PAGE', 10));
+    }
+
+
+    public function baseQueryForRole(int $roleId)
+    {
+        return $this->db->table($this->table)
+            ->select([
+                'acl_role_permissions.id             AS role_perm_id',
+                'acl_role_permissions.role_id        AS role_id',
+                'acl_role_permissions.permission_id  AS permission_id',
+                'acl_permissions.id                  AS perm_id',
+                'acl_permissions.name                AS permission_name',
+                'acl_permissions.slug                AS permission_slug',
+                'acl_permissions.description         AS permission_description',
+            ])
+            ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'inner')
+            ->where('acl_role_permissions.role_id', $roleId);
+    }
+
+    public function countByRole(int $roleId): int
+    {
+        return $this->db->table($this->table)
+            ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'inner')
+            ->where('acl_role_permissions.role_id', $roleId)
+            ->countAllResults();
     }
 }

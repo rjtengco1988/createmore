@@ -10,6 +10,7 @@ $routes->get('/a/login/', 'Login::index');
 $routes->get('login-status', 'Login::loginStatus');
 $routes->get('/auth', 'Login::auth');
 
+
 $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->get('dashboard', 'Dashboard::index');
     $routes->get('test-tampered', 'Dashboard::testTamperedToken');
@@ -19,4 +20,5 @@ $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->add('roles/attach-permissions', 'Roles::attachPermissions');
     $routes->get('api/permissions', 'Permissions::apiList');
     $routes->add('role-information/(:any)', 'Roles::roleInformation/$1');
+    $routes->add('roles/(:num)/permissions/json', 'Roles::permissionsJson/$1');
 });

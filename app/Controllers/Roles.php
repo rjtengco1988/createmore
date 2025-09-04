@@ -241,7 +241,7 @@ class Roles extends BaseController
 
             $data['rolesInformation'] = $this->roles_model->findById($id);
             $data['noAttachedPermission'] = $this->roles_permission->countPermissionsAttached($id);
-            $data['attachedPermissions'] = $this->roles_permission->findPermissionsAttached($id);
+            $data['attachedPermissions'] = $this->roles_permission->findPermissionsByNameAndId($this->request->getPost('search_criteria'), $id);
             $data['pager'] = $this->roles_permission->pager;
 
             if (empty($data['rolesInformation'])) {
@@ -265,9 +265,116 @@ class Roles extends BaseController
             $data['error'] = "A data error occurred. Please try again later.";
         }
 
+
+        if ($this->request->getMethod() === 'POST') {
+
+
+            $filterRules = [
+                'search_criteria' => [
+                    'label' => 'Search Criteria',
+                    'rules' => 'required|alpha_numeric_space|max_length[100]',
+                ],
+            ];
+
+
+            if ($this->validate($filterRules)) {
+
+                try {
+                    $data['attachedPermissions'] = $this->roles_permission->findPermissionsByNameAndId($this->request->getPost('search_criteria'), $id);
+                } catch (DatabaseException $e) {
+                    log_message('error', sprintf(
+                        "Database Error: %s in %s on line %d",
+                        $e->getMessage(),
+                        $e->getFile(),
+                        $e->getLine()
+                    ));
+                    $data['error'] = "A database error occurred. Please try again later.";
+                } catch (DataException $e) {
+                    log_message('error', sprintf(
+                        "Data Error: %s in %s on line %d",
+                        $e->getMessage(),
+                        $e->getFile(),
+                        $e->getLine()
+                    ));
+                    $data['error'] = "A data error occurred. Please try again later.";
+                }
+            } else {
+
+                $data['validation'] = $this->validator;
+            }
+        }
+
+
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
         echo view('role_information', $data);
         echo view('common/admin_footer', $data);
+    }
+
+
+    public function permissionsJson($roleId)
+    {
+        $request = service('request');
+        $model   = new \App\Models\RolesPermission();
+
+        // DataTables params
+        $draw   = (int) ($request->getPost('draw')   ?? 1);
+        $start  = (int) ($request->getPost('start')  ?? 0);
+        $length = (int) ($request->getPost('length') ?? 10);
+        $search = trim(($request->getPost('search')['value'] ?? ''));
+
+        $order = $request->getPost('order')[0] ?? ['column' => 1, 'dir' => 'asc'];
+        $colIdx = (int) ($order['column'] ?? 1);
+        $dir    = strtoupper($order['dir'] ?? 'ASC');
+        $dir    = $dir === 'DESC' ? 'DESC' : 'ASC';
+
+        // Column map (DataTable columns below will match these indices)
+        // 0 = checkbox (not orderable), then:
+        $columns = [
+            1 => 'acl_permissions.name',
+            2 => 'acl_permissions.slug',
+            3 => 'acl_permissions.description',
+        ];
+        $orderBy = $columns[$colIdx] ?? 'acl_permissions.name';
+
+        // counts
+        $recordsTotal = $model->countByRole((int)$roleId);
+
+        // filtered builder
+        $filterBuilder = $model->baseQueryForRole((int)$roleId);
+        if ($search !== '') {
+            $filterBuilder->groupStart()
+                ->like('acl_permissions.name', $search, 'both', true)
+                ->orLike('acl_permissions.slug', $search, 'both', true)
+                ->orLike('acl_permissions.description', $search, 'both', true)
+                ->groupEnd();
+        }
+        $recordsFiltered = (clone $filterBuilder)->countAllResults();
+
+        // page rows
+        $rows = $filterBuilder
+            ->orderBy($orderBy, $dir)
+            ->limit($length, $start)
+            ->get()->getResultArray();
+
+        $data = [];
+        foreach ($rows as $r) {
+            $data[] = [
+                // raw HTML for the checkbox:
+                'checkbox'    => '<input type="checkbox" class="row-check form-check-input" name="ids[]" value="' . $r['permission_id'] . '">',
+                'name'        => $r['permission_name'] ?? '',
+                'slug'        => $r['permission_slug'] ?? '',
+                'description' => $r['permission_description'] ?? '',
+            ];
+        }
+
+        return $this->response->setJSON([
+            'draw'            => $draw,
+            'recordsTotal'    => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data'            => $data,
+            // hand back a fresh token so JS can keep CSRF in sync
+            'csrfToken'       => csrf_hash(),
+        ]);
     }
 }
