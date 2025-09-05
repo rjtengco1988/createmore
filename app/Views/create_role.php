@@ -97,33 +97,7 @@
                                 <button class="aws-banner__close" type="button" aria-label="Dismiss" onclick="closeAwsBanner()">&times;</button>
                             </div>
 
-
-
-
-
-                        <?php elseif (session()->getFlashdata('error')): ?>
-
-                            <div class="aws-banner" id="awsBanner">
-                                <div class="aws-banner__msg">
-                                    <strong>An error occured.</strong>
-                                    <ul class="aws-banner__list">
-
-                                        <li><?= session()->getFlashdata('error') ?></li>
-
-                                    </ul>
-                                </div>
-                                <button class="aws-banner__close" type="button" aria-label="Dismiss" onclick="closeAwsBanner()">&times;</button>
-                            </div>
-
                         <?php endif; ?>
-
-                        <script>
-                            function closeAwsBanner() {
-                                const b = document.getElementById('awsBanner');
-                                b.classList.add('fade-out');
-                                setTimeout(() => b.remove(), 500);
-                            }
-                        </script>
 
                         <!--begin::Header-->
                         <div class="card-header">
@@ -218,7 +192,6 @@
     </div>
     <!--end::App Content-->
 </main>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

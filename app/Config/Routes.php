@@ -21,4 +21,6 @@ $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->get('api/permissions', 'Permissions::apiList');
     $routes->add('role-information/(:any)', 'Roles::roleInformation/$1');
     $routes->add('roles/(:num)/permissions/json', 'Roles::permissionsJson/$1');
+    $routes->add('exception-404', 'Error::exception404');
+    $routes->add('exception-500', 'Error::exception500');
 });

@@ -4,15 +4,15 @@
 
 
         <div class="container-fluid">
-            <?php if (!isset($error) && empty($error)): ?>
-                <nav aria-label="Breadcrumb">
-                    <ol class="breadcrumb mb-2">
-                        <li class="breadcrumb-item"><a href="<?= base_url('a/roles'); ?>">Roles</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><?= esc($rolesInformation['name']); ?></li>
-                    </ol>
-                </nav>
 
-            <?php endif; ?>
+            <nav aria-label="Breadcrumb">
+                <ol class="breadcrumb mb-2">
+                    <li class="breadcrumb-item"><a href="<?= base_url('a/roles'); ?>">Roles</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><?= esc($rolesInformation['name']); ?></li>
+                </ol>
+            </nav>
+
+
             <div class="row align-items-center">
 
 
@@ -134,23 +134,23 @@
 
                         <div class="card-header">
 
-                            <?php if (!isset($error) && empty($error)): ?>
-                                <div class="row g-3">
-                                    <div class="col-md">
-                                        <div class="fw-semibold text-muted">Description</div>
-                                        <div><?= esc($rolesInformation['description'] ?? '—') ?></div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="fw-semibold text-muted">Permissions</div>
-                                        <div class="fs-5"><?= $noAttachedPermission ?? '—' ?></div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="fw-semibold text-muted">Users</div>
-                                        <div class="fs-5"><? //= count($users) 
-                                                            ?></div>
-                                    </div>
+
+                            <div class="row g-3">
+                                <div class="col-md">
+                                    <div class="fw-semibold text-muted">Description</div>
+                                    <div><?= esc($rolesInformation['description'] ?? '—') ?></div>
                                 </div>
-                            <?php endif; ?>
+                                <div class="col-md-2">
+                                    <div class="fw-semibold text-muted">Permissions</div>
+                                    <div class="fs-5"><?= $noAttachedPermission ?? '—' ?></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="fw-semibold text-muted">Users</div>
+                                    <div class="fs-5"><? //= count($users) 
+                                                        ?></div>
+                                </div>
+                            </div>
+
 
                             <div class="row g-3">
                                 <div class="col-md d-flex justify-content-between align-items-center">

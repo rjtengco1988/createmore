@@ -49,7 +49,7 @@ class Roles extends BaseController
                 $e->getFile(),
                 $e->getLine()
             ));
-            $data['error'] = "A database error occurred. Please try again later.";
+            return redirect()->to('a/exception-500/');
         } catch (DataException $e) {
             log_message('error', sprintf(
                 "Data Error: %s in %s on line %d",
@@ -57,7 +57,7 @@ class Roles extends BaseController
                 $e->getFile(),
                 $e->getLine()
             ));
-            $data['error'] = "A data error occurred. Please try again later.";
+            return redirect()->to('a/exception-500/');
         }
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
@@ -119,9 +119,7 @@ class Roles extends BaseController
                         $e->getFile(),
                         $e->getLine()
                     ));
-                    return redirect()
-                        ->back()
-                        ->with('error', $e->getMessage());
+                    return redirect()->to('a/exception-500/');
                 }
             } else {
                 $data['validation'] = $this->validator;
@@ -205,7 +203,7 @@ class Roles extends BaseController
                     $e->getFile(),
                     $e->getLine()
                 ));
-                $data['error'] = "A database error occurred. Please try again later.";
+                return redirect()->to('a/exception-500/');
             } catch (DataException $e) {
                 log_message('error', sprintf(
                     "Data Error: %s in %s on line %d",
@@ -213,7 +211,7 @@ class Roles extends BaseController
                     $e->getFile(),
                     $e->getLine()
                 ));
-                $data['error'] = "A data error occurred. Please try again later.";
+                return redirect()->to('a/exception-500/');
             }
         }
 
@@ -245,7 +243,12 @@ class Roles extends BaseController
             $data['pager'] = $this->roles_permission->pager;
 
             if (empty($data['rolesInformation'])) {
-                $data['error'] = "No Role Name Found. Please make sure the role name exist.";
+                $error = "No Role Name Found. Please make sure the role name exist.";
+                log_message(
+                    'info',
+                    $error
+                );
+                return redirect()->to('a/exception-404/');
             }
         } catch (DatabaseException $e) {
             log_message('error', sprintf(
@@ -254,7 +257,7 @@ class Roles extends BaseController
                 $e->getFile(),
                 $e->getLine()
             ));
-            $data['error'] = "A database error occurred. Please try again later.";
+            return redirect()->to('a/exception-500/');
         } catch (DataException $e) {
             log_message('error', sprintf(
                 "Data Error: %s in %s on line %d",
@@ -262,7 +265,7 @@ class Roles extends BaseController
                 $e->getFile(),
                 $e->getLine()
             ));
-            $data['error'] = "A data error occurred. Please try again later.";
+            return redirect()->to('a/exception-500/');
         }
 
 
@@ -288,7 +291,7 @@ class Roles extends BaseController
                         $e->getFile(),
                         $e->getLine()
                     ));
-                    $data['error'] = "A database error occurred. Please try again later.";
+                    return redirect()->to('a/exception-500/');
                 } catch (DataException $e) {
                     log_message('error', sprintf(
                         "Data Error: %s in %s on line %d",
@@ -296,7 +299,7 @@ class Roles extends BaseController
                         $e->getFile(),
                         $e->getLine()
                     ));
-                    $data['error'] = "A data error occurred. Please try again later.";
+                    return redirect()->to('a/exception-500/');
                 }
             } else {
 

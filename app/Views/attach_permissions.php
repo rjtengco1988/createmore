@@ -24,25 +24,10 @@
                     <!-- Card -->
                     <div class="card card-primary card-outline">
 
-                        <?php if (session()->getFlashdata('error')): ?>
-
-                            <div class="aws-banner aws-banner--error" id="awsBanner">
-                                <div class="aws-banner__msg">
-                                    <strong>Validation Error.</strong>
-                                    <ul class="aws-banner__list">
-
-                                        <li><?= session()->getFlashdata('error') ?></li>
-
-                                    </ul>
-                                </div>
-                                <button class="aws-banner__close" type="button" aria-label="Dismiss" onclick="closeAwsBanner()">&times;</button>
-                            </div>
 
 
 
-
-
-                        <?php elseif (session()->getFlashdata('success')): ?>
+                        <?php if (session()->getFlashdata('success')): ?>
                             <div class="aws-banner aws-banner--success" id="awsBanner">
                                 <div class="aws-banner__msg">
                                     <strong>Success!</strong>
