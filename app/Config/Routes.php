@@ -10,6 +10,7 @@ $routes->get('/a/login/', 'Login::index');
 $routes->get('login-status', 'Login::loginStatus');
 $routes->get('/auth', 'Login::auth');
 
+$routes->set404Override('\App\Controllers\Error::exception404');
 
 $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->get('dashboard', 'Dashboard::index');
@@ -23,4 +24,5 @@ $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->add('roles/(:num)/permissions/json', 'Roles::permissionsJson/$1');
     $routes->add('exception-404', 'Error::exception404');
     $routes->add('exception-500', 'Error::exception500');
+    $routes->add('role-information/edit/(:any)', 'Roles::roleInformationEdit/$1');
 });
