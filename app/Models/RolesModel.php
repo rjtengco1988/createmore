@@ -86,5 +86,12 @@ class RolesModel extends Model
         return $this->where('id', $id)->first();
     }
 
-    public function editRoleById($id) {}
+    public function editRoleById($id, $field)
+    {
+
+        return $this->set('name', $field['name'])
+            ->set('description', $field['description'])
+            ->where('id', $id)
+            ->update();
+    }
 }

@@ -441,7 +441,15 @@ class Roles extends BaseController
 
 
                 if ($this->validate($filterRules)) {
-                    echo "RJ";
+                    $field = [
+                        'name' => $this->request->getPost('name'),
+                        'description' => $this->request->getPost('description')
+                    ];
+
+                    $this->roles_model->editRoleById($id, $field);
+                    return redirect()
+                        ->to('a/role-information/edit/' . $id)
+                        ->with('success', 'Role updated successfully.');
                 } else {
                     $data['validation'] = $this->validator;
                 }
