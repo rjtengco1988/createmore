@@ -416,6 +416,55 @@ class Roles extends BaseController
             return redirect()->to('a/exception-500/');
         }
 
+
+        if ($this->request->getMethod() === 'POST') {
+
+
+
+            try {
+
+                $filterRules = [
+                    'name' => [
+                        'label' => 'Role Name',
+                        'rules' => 'required|max_length[128]|regex_match[/^[A-Za-z0-9 +=,.@-]+$/]',
+                    ],
+
+
+                    'description' => [
+                        'label' => 'Role Description',
+                        'rules' => 'permit_empty|max_length[200]',
+                        'errors' => [
+                            'max_length' => 'The {field} must be 200 characters or fewer.'
+                        ]
+                    ],
+                ];
+
+
+                if ($this->validate($filterRules)) {
+                    echo "RJ";
+                } else {
+                    $data['validation'] = $this->validator;
+                }
+            } catch (DatabaseException $e) {
+                log_message('error', sprintf(
+                    "Database Error: %s in %s on line %d",
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()
+                ));
+                return redirect()->to('a/exception-500/');
+            } catch (DataException $e) {
+                log_message('error', sprintf(
+                    "Data Error: %s in %s on line %d",
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()
+                ));
+                return redirect()->to('a/exception-500/');
+            }
+        }
+
+
         echo view('common/admin_header', $data);
         echo view('common/admin_menubar', $data);
         echo view('role_information_edit', $data);
