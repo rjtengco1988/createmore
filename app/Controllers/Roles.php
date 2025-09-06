@@ -380,4 +380,45 @@ class Roles extends BaseController
             'csrfToken'       => csrf_hash(),
         ]);
     }
+
+    public function roleInformationEdit($id)
+    {
+        $data['title'] = "Create More";
+
+        try {
+
+            $data['role'] = $this->roles_model->findById($id);
+            $data['permissions'] = $this->roles_permission->findPermissionsAttached($id);
+
+            if (empty($data['role'])) {
+                $error = "No Role Name Found. Please make sure the role name exist.";
+                log_message(
+                    'info',
+                    $error
+                );
+                return redirect()->to('a/exception-404/');
+            }
+        } catch (DatabaseException $e) {
+            log_message('error', sprintf(
+                "Database Error: %s in %s on line %d",
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            ));
+            return redirect()->to('a/exception-500/');
+        } catch (DataException $e) {
+            log_message('error', sprintf(
+                "Data Error: %s in %s on line %d",
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            ));
+            return redirect()->to('a/exception-500/');
+        }
+
+        echo view('common/admin_header', $data);
+        echo view('common/admin_menubar', $data);
+        echo view('role_information_edit', $data);
+        echo view('common/admin_footer', $data);
+    }
 }

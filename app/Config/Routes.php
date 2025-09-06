@@ -20,9 +20,9 @@ $routes->group('a', ['filter' => 'auth'], function ($routes) {
     $routes->add('roles/create', 'Roles::createRole');
     $routes->add('roles/attach-permissions', 'Roles::attachPermissions');
     $routes->get('api/permissions', 'Permissions::apiList');
+    $routes->add('role-information/edit/(:num)', 'Roles::roleInformationEdit/$1');
     $routes->add('role-information/(:any)', 'Roles::roleInformation/$1');
     $routes->add('roles/(:num)/permissions/json', 'Roles::permissionsJson/$1');
     $routes->add('exception-404', 'Error::exception404');
     $routes->add('exception-500', 'Error::exception500');
-    $routes->add('role-information/edit/(:any)', 'Roles::roleInformationEdit/$1');
 });

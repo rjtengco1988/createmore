@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Login extends BaseController
 {
+
     public function index()
     {
 
@@ -21,6 +22,7 @@ class Login extends BaseController
 
         return redirect()->to($login_url);
     }
+
 
     public function auth()
     {

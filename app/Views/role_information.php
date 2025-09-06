@@ -27,7 +27,7 @@
 
                     <!-- Buttons -->
                     <div class="ms-auto d-flex gap-2">
-                        <a href="<?= base_url('a/roles/edit/' . $rolesInformation['id']); ?>" class="btn btn-outline-primary fw-semibold">
+                        <a href="<?= base_url('a/role-information/edit/' . $rolesInformation['id']); ?>" class="btn btn-outline-primary fw-semibold">
                             Edit
                         </a>
                         <a href="<?= base_url('a/roles'); ?>" class="btn btn-outline-secondary text-muted" disabled>

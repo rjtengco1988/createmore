@@ -81,6 +81,7 @@ class RolesPermission extends Model
             'acl_role_permissions.permission_id AS permission_id',
             'acl_permissions.id                 AS perm_id',
             'acl_permissions.name               AS permission_name',
+            'acl_permissions.slug               AS permission_slug',
             'acl_permissions.description        AS permission_description',
         ])
             ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'inner') // or 'left' if you need orphans
@@ -141,5 +142,11 @@ class RolesPermission extends Model
             ->join('acl_permissions', 'acl_permissions.id = acl_role_permissions.permission_id', 'inner')
             ->where('acl_role_permissions.role_id', $roleId)
             ->countAllResults();
+    }
+
+
+    public function findByRoleId($roleId)
+    {
+        return $this->where('role_id', $roleId)->findAll();
     }
 }
